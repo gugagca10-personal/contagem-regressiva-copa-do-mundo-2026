@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#001A4E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Copa 2026">
+  <meta name="description" content="Contagem regressiva para a Copa do Mundo 2026 — Alegria que Apavora 🇧🇷">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-apple.svg">
+  <title>Copa 2026 🇧🇷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      background: #001A4E;
+      color: #FFDF00;
+      font-family: 'Barlow Condensed', sans-serif;
+      position: relative;
+    }
+
+    /* ─── Background gradient animado ─── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: linear-gradient(
+        140deg,
+        #000D2E 0%,
+        #002776 18%,
+        #004E2C 40%,
+        #006B3F 55%,
+        #C9A800 72%,
+        #FFDF00 82%,
+        #002776 100%
+      );
+      background-size: 300% 300%;
+      animation: bgShift 10s ease infinite;
+    }
+
+    @keyframes bgShift {
+      0%   { background-position: 0%   50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0%   50%; }
+    }
+
+    /* ─── Noise overlay para textura ─── */
+    .bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    /* ─── Canvas de partículas ─── */
+    #particles {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ─── Conteúdo principal ─── */
+    .wrap {
+      position: relative; z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 24px 36px;
+      width: 100%; max-width: 440px;
+      gap: 0;
+    }
+
+    /* ─── Header label ─── */
+    .header-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255, 223, 0, 0.5);
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    /* ─── Escudo / losango estilizado ─── */
+    .emblem-wrap {
+      margin-bottom: 28px;
+      animation: emblemPulse 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 24px rgba(255, 223, 0, 0.35));
+    }
+
+    @keyframes emblemPulse {
+      0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(255,223,0,0.35)); }
+      50%       { transform: scale(1.06); filter: drop-shadow(0 0 38px rgba(255,223,0,0.6)); }
+    }
+
+    /* ─── Título ─── */
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 15vw, 80px);
+      letter-spacing: 8px;
+      color: #FFDF00;
+      text-shadow: 0 0 50px rgba(255, 223, 0, 0.5), 0 3px 12px rgba(0,0,0,0.6);
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 44px;
+      text-align: center;
+    }
+
+    /* ─── Grid do contador ─── */
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 44px;
+    }
+
+    .unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Card de cada unidade */
+    .card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 223, 0, 0.15);
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    /* Linha divisória estilo flip-clock */
+    .card::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 2;
+    }
+
+    .num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 12vw, 64px);
+      line-height: 1;
+      color: #FFFFFF;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3), 0 2px 8px rgba(0,0,0,0.7);
+      user-select: none;
+      position: relative; z-index: 3;
+    }
+
+    .num.flip {
+      animation: numFlip 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes numFlip {
+      0%   { transform: scaleY(1);   opacity: 1; }
+      40%  { transform: scaleY(0);   opacity: 0.2; }
+      100% { transform: scaleY(1);   opacity: 1; }
+    }
+
+    .unit-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255, 223, 0, 0.7);
+    }
+
+    /* ─── Slogan ─── */
+    .slogan {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(22px, 6.5vw, 32px);
+      letter-spacing: 5px;
+      color: #FFDF00;
+      text-shadow: 0 0 30px rgba(255, 223, 0, 0.5);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .event-date {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+    }
+
+    /* ─── Estado: chegou a hora ─── */
+    .finished {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 44px;
+    }
+
+    .finished-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 11vw, 56px);
+      letter-spacing: 4px;
+      color: #FFDF00;
+      text-align: center;
+      animation: glowPulse 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from { text-shadow: 0 0 20px rgba(255,223,0,0.6); }
+      to   { text-shadow: 0 0 70px rgba(255,223,0,1), 0 0 120px rgba(255,223,0,0.4); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="wrap">
+    <!-- Label topo -->
+    <div class="header-label">EUA &middot; MÉXICO &middot; CANADÁ &middot; 2026</div>
+
+    <!-- Escudo estilizado -->
+    <div class="emblem-wrap">
+      <svg width="110" height="80" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Verde externo -->
+        <rect width="220" height="160" rx="8" fill="#009C3B"/>
+        <!-- Losango amarelo -->
+        <polygon points="110,10 210,80 110,150 10,80" fill="#FFDF00"/>
+        <!-- Círculo azul -->
+        <circle cx="110" cy="80" r="44" fill="#002776"/>
+        <!-- Faixa branca curva (equador) -->
+        <path d="M 68 80 Q 110 62 152 80" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Estrelas representativas -->
+        <g fill="white">
+          <polygon points="110,57 112.4,63.4 119.2,63.4 113.9,67.5 115.9,73.9 110,69.9 104.1,73.9 106.1,67.5 100.8,63.4 107.6,63.4" transform="scale(0.6) translate(73,40)"/>
+          <circle cx="96"  cy="74" r="2.2"/>
+          <circle cx="124" cy="74" r="2.2"/>
+          <circle cx="99"  cy="88" r="2.2"/>
+          <circle cx="121" cy="88" r="2.2"/>
+          <circle cx="110" cy="93" r="2.2"/>
+        </g>
+        <!-- BRASIL -->
+        <text x="110" y="83" text-anchor="middle" fill="white"
+              font-family="Arial, sans-serif" font-size="11" font-weight="bold"
+              letter-spacing="3">BRASIL</text>
+      </svg>
+    </div>
+
+    <!-- Título -->
+    <div class="title">COPA 2026</div>
+    <div class="subtitle">FIFA World Cup &middot; Fase de Grupos</div>
+
+    <!-- Countdown -->
+    <div class="countdown" id="countdown">
+      <div class="unit">
+        <div class="card"><span class="num" id="days">00</span></div>
+        <div class="unit-label">Dias</div>
+      </div>
+      <div class="unit">
+        <div class="card"><span class="num" id="hours">00</span></div>
+        <div class="unit-label">Horas</div>
+      </div>
+      <div class="unit">
+        <div class="card"><span class="num" id="minutes">00</span></div>
+        <div class="unit-label">Min</div>
+      </div>
+      <div class="unit">
+        <div class="card"><span class="num" id="seconds">00</span></div>
+        <div class="unit-label">Seg</div>
+      </div>
+    </div>
+
+    <!-- Estado final -->
+    <div class="finished" id="finished">
+      <div class="finished-text">É HOJE, BRASIL! 🇧🇷</div>
+      <div class="finished-text" style="font-size:clamp(18px,5vw,26px);opacity:.8;letter-spacing:3px">RUMO AO HEXA</div>
+    </div>
+
+    <!-- Slogan -->
+    <div class="slogan">Alegria que Apavora</div>
+    <div class="event-date">Abertura: 11 Jun 2026 &middot; Estádio Azteca</div>
+  </div>
+
+  <script>
+    // ─── Countdown ─────────────────────────────────────────────────────────────
+    // Abertura Copa 2026: 11 Jun 2026, 20:00 horário de Brasília (UTC-3) = 23:00 UTC
+    const TARGET = new Date('2026-06-11T23:00:00Z');
+
+    const $days    = document.getElementById('days');
+    const $hours   = document.getElementById('hours');
+    const $minutes = document.getElementById('minutes');
+    const $seconds = document.getElementById('seconds');
+    const $cd      = document.getElementById('countdown');
+    const $fin     = document.getElementById('finished');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    const prev = {};
+
+    function animate(el, val) {
+      const str = pad(val);
+      if (str === prev[el.id]) return;
+      prev[el.id] = str;
+      el.textContent = str;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+
+    function tick() {
+      const diff = TARGET - Date.now();
+      if (diff <= 0) {
+        $cd.style.display = 'none';
+        $fin.style.display = 'flex';
+        return;
+      }
+      animate($days,    Math.floor(diff / 86_400_000));
+      animate($hours,   Math.floor((diff % 86_400_000) / 3_600_000));
+      animate($minutes, Math.floor((diff % 3_600_000) / 60_000));
+      animate($seconds, Math.floor((diff % 60_000) / 1_000));
+    }
+
+    tick();
+    setInterval(tick, 1000);
+
+    // ─── Partículas ─────────────────────────────────────────────────────────────
+    const canvas = document.getElementById('particles');
+    const ctx    = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COLORS = ['#FFDF00', '#FFDF00', '#009C3B', '#FFFFFF', '#87CEE8', '#C9A800'];
+
+    function newParticle(fromBottom = true) {
+      return {
+        x:      Math.random() * canvas.width,
+        y:      fromBottom ? canvas.height + 10 : Math.random() * canvas.height,
+        r:      Math.random() * 2.5 + 0.8,
+        speed:  Math.random() * 0.9 + 0.2,
+        alpha:  Math.random() * 0.5 + 0.15,
+        color:  COLORS[Math.floor(Math.random() * COLORS.length)],
+        wobble: Math.random() * Math.PI * 2,
+        ws:     (Math.random() - 0.5) * 0.04,
+        isDia:  Math.random() > 0.6,
+        twinklePhase: Math.random() * Math.PI * 2,
+      };
+    }
+
+    const pts = Array.from({ length: 70 }, () => newParticle(false));
+
+    function drawDia(x, y, r) {
+      ctx.beginPath();
+      ctx.moveTo(x, y - r * 1.6);
+      ctx.lineTo(x + r, y);
+      ctx.lineTo(x, y + r * 1.6);
+      ctx.lineTo(x - r, y);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        p.y      -= p.speed;
+        p.wobble += p.ws;
+        p.x      += Math.sin(p.wobble) * 0.7;
+        p.twinklePhase += 0.04;
+
+        const alpha = p.alpha * (0.7 + 0.3 * Math.sin(p.twinklePhase));
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle   = p.color;
+
+        if (p.isDia) drawDia(p.x, p.y, p.r);
+        else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        if (p.y < -20 || p.x < -20 || p.x > canvas.width + 20) {
+          pts[i] = newParticle(true);
+        }
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+    frame();
+
+    // ─── Service Worker ──────────────────────────────────────────────────────────
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

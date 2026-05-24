@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#009C3B"/>
+  <polygon points="256,38 484,256 256,474 28,256" fill="#FFDF00"/>
+  <circle cx="256" cy="256" r="112" fill="#002776"/>
+  <path d="M 150 256 Q 256 208 362 256" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <g fill="white">
+    <circle cx="218"  cy="237" r="7.5"/>
+    <circle cx="294"  cy="237" r="7.5"/>
+    <circle cx="226"  cy="277" r="7.5"/>
+    <circle cx="286"  cy="277" r="7.5"/>
+    <circle cx="256"  cy="288" r="7.5"/>
+  </g>
+  <text x="256" y="270" text-anchor="middle" fill="white"
+        font-family="Arial, sans-serif" font-size="34" font-weight="bold" letter-spacing="5">BRASIL</text>
+</svg>
