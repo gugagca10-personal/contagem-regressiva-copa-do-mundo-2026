@@ -2,13 +2,17 @@
   "name": "Copa 2026 – Contagem Regressiva",
   "short_name": "Copa 2026",
   "description": "Contagem regressiva para a Copa do Mundo 2026 — Alegria que Apavora",
-  "start_url": "/",
+  "start_url": "/contagem-regressiva-copa-do-mundo-2026/",
+  "scope": "/contagem-regressiva-copa-do-mundo-2026/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#001A4E",
   "theme_color": "#001A4E",
   "lang": "pt-BR",
-  "categories": ["sports", "entertainment"],
+  "categories": [
+    "sports",
+    "entertainment"
+  ],
   "icons": [
     {
       "src": "icon-192.svg",
