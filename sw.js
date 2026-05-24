@@ -1,10 +1,10 @@
-const CACHE = 'copa2026-v1';
+const CACHE = 'copa2026-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg',
+  '/contagem-regressiva-copa-do-mundo-2026/',
+  '/contagem-regressiva-copa-do-mundo-2026/index.html',
+  '/contagem-regressiva-copa-do-mundo-2026/manifest.json',
+  '/contagem-regressiva-copa-do-mundo-2026/icon-192.svg',
+  '/contagem-regressiva-copa-do-mundo-2026/icon-512.svg',
   'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,700&display=swap',
 ];
 
